@@ -5,12 +5,16 @@ class PokemonContainer extends React.Component{
   constructor(props){
     super(props);
     this.state = {
-      pokemon:[]
+      pokemon:[],
+      pokemonA:[],
+      pokemonB:[]
     }
+
+    this.getPokemonByUrl = this.getPokemonByUrl.bind(this);
   }
 
   componentDidMount(){
-    const url = 'https://pokeapi.co/api/v2/pokemon/?limit=151';
+    const url = 'https://pokeapi.co/api/v2/pokemon/';
     const request = new XMLHttpRequest();
     request.open('GET',url);
 
@@ -29,12 +33,51 @@ class PokemonContainer extends React.Component{
 
   }
 
-  render(){
-    // console.log("original: ",this.state.pokemon);
+  getPokemonByUrl(url){
+    const request = new XMLHttpRequest();
+    request.open('GET',url);
 
-    return(
-      <PokemonList pokemonarray={this.state.pokemon}/>
-    )
+    request.addEventListener("load",()=>{
+      if(request.status !==200)return;
+      const jsonString = request.responseText;
+      const data = JSON.parse(jsonString);
+
+      // console.log("DATA: ",pokemonData);
+      if(this.state.pokemonA.length == 0){
+        this.setState({pokemonA:data})
+      } else if(this.state.pokemonB == 0){
+        this.setState({pokemonB:data})
+      };
+
+
+    });
+    request.send();
+  }
+
+  render(){
+    console.log("original: ",this.state.pokemonA);
+    if (this.state.pokemonA.length !==0 && this.state.pokemonB.length !==0){
+      console.log("got shit");
+      return(
+        <PokemonList
+          pokemonarray={this.state.pokemon}
+          getPokemonStats={this.getPokemonByUrl}
+          pokemonAstats={this.state.pokemonA}
+          pokemonBstats={this.state.pokemonB}
+
+        />
+      )
+    } else {
+      console.log("not got shit");
+      return(
+        <PokemonList
+          pokemonarray={this.state.pokemon}
+          getPokemonStats={this.getPokemonByUrl}
+        />
+      )
+    }
+
+
   }
 }
 
