@@ -26,7 +26,7 @@ class PokemonContainer extends React.Component{
 
       let originalPokemon = pokemonBlob.splice(0,151);
 
-      console.log("Pokemon: ",data);
+      // console.log("Pokemon: ",data);
       this.setState({pokemon:originalPokemon})
     });
     request.send();
@@ -55,9 +55,7 @@ class PokemonContainer extends React.Component{
   }
 
   render(){
-    console.log("original: ",this.state.pokemonA);
     if (this.state.pokemonA.length !==0 && this.state.pokemonB.length !==0){
-      console.log("got shit");
       return(
         <PokemonList
           pokemonarray={this.state.pokemon}
@@ -68,7 +66,6 @@ class PokemonContainer extends React.Component{
         />
       )
     } else {
-      console.log("not got shit");
       return(
         <PokemonList
           pokemonarray={this.state.pokemon}
